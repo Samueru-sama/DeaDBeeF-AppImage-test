@@ -26,8 +26,12 @@ ICON="https://raw.githubusercontent.com/DeaDBeeF-Player/deadbeef/master/icons/sc
 TARBALL=$(wget "$SITE" -O - | sed 's/[()",{} ]/\n/g' \
 	| grep -o "https.*linux.*$ARCH.tar.bz2.*download$" | head -1)
 
-# FIXME
-export VERSION=$(echo "$TARBALL" | awk -F'_' '{print $2; exit}')
+if [ "$1" = 'devel' ]; then
+	export VERSION=$(wget "$SITE" -O - | sed 's/"/ /g' \
+		| grep "files_date" | grep -o "[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}" | head -1)
+else
+	export VERSION=$(echo "$TARBALL" | awk -F'_' '{print $2; exit}')
+fi
 
 # Prepare AppDir
 mkdir ./AppDir
@@ -89,7 +93,7 @@ find ./ -type f -exec strip -s -R .comment --strip-unneeded {} ';'
 
 # MAKE APPIAMGE WITH FUSE3 COMPATIBLE APPIMAGETOOL
 cd ..
-wget -q "$APPIMAGETOOL" -O ./appimagetool
+wget "$APPIMAGETOOL" -O ./appimagetool
 chmod +x ./appimagetool
 
 ./appimagetool -n -u "$UPINFO" \
