@@ -53,7 +53,7 @@ fi
 TARBALL=$(wget "$SITE" -O - | sed 's/[()",{} ]/\n/g' \
 	| grep -o "https.*linux.*$ARCH.tar.bz2.*download$" | head -1)
 
-wget --user-agent="Mozilla/5.0" --retry-connrefused --tries=30 "$TARBALL" -O /tmp/download.tar.bz2
+wget --retry-connrefused --tries=30 "https://excellmedia.dl.sourceforge.net/project/deadbeef/travis/linux/1.10.0/deadbeef-static_1.10.0-1_x86_64.tar.bz2?viasf=1" -O /tmp/download.tar.bz2
 tar xvf /tmp/download.tar.bz2
 VERSION=$(echo ./deadbeef-*)
 echo "${VERSION#*-}" > ~/version
